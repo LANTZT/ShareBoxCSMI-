@@ -16,12 +16,14 @@ int main( int argc, char** argv ) {
                                 _author="Feel++ Consortium",
                                 _email="feelpp-devel@feelpp.org"));
   auto mesh = unitCircle();
-  auto A=Environment::vm(_name="A").template as<double>();
-  auto R=Environment::vm(_name="R").template as<double>();
-  auto T=Environment::vm(_name="T").template as<double>();
-  auto x0=Environment::vm(_name="x0").template as<double>();
-  auto y0=Environment::vm(_name="y0").template as<double>();
-  // $\mathbb{P}_{2}$ finite element space on
+  auto A=option(_name="A").as<double>();
+  auto R=option(_name="R").as<double>();
+  auto T=option(_name="T").as<double>();
+  auto x0=option(_name="x0").as<double>();
+  auto y0=option(_name="y0").as<double>();
+  auto theta=option(_name="theta").as<double>();
+  auto sigma=option(_name="sigma").as<double>();
+    // $\mathbb{P}_{2}$ finite element space on
   // triangular elements
   auto Xh = Pch<2>(mesh);
   auto u = Xh->element();
