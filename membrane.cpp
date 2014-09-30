@@ -28,17 +28,18 @@ int main( int argc, char** argv ) {
   auto Xh = Pch<2>(mesh);
   auto u = Xh->element();
   auto v = Xh->element();
-  auto ue = expr("1+x*x+2*y*y:x:y");
-  auto f = expr("-6:x:y");
+  //auto ue = expr("1+x*x+2*y*y:x:y");
+  //auto f = expr("-6:x:y");
+    auto f=expr("exp(-0.5*(pow((R*-x0)/sigma,2)) - 0.5*(pow((R*y-y0)/sigma,2))):x:y:T:sigma:x0:y0");
   // $\int_\Omega f v$
   auto l = form1(_test=Xh);
-  l= integrate( elements(mesh), f*id(v) );
-  // $\int_\Omega \nabla u \cdot \nabla v$
+  l= integrate( _range=elements(mesh),_expr= f*id(v) );
+    // $\int_\Omega \nabla u \cdot \nabla v$
   auto a = form2(_test=Xh,_trial=Xh);
   a = integrate( _range=elements(mesh),
                  _expr=gradt(u)*trans(grad(v)) );
-  a+=on( boundaryfaces(mesh), u, l, ue );
-  // solve a( u, v ) = l( v )
+  a+=on( _range=boundaryfaces(mesh),_element= u, _rhs=l,expr=cst(0.) );
+   // solve a( u, v ) = l( v )
   a.solve( _solution=u, _rhs=l );
 
   std::cout << "|u-ue|= "
