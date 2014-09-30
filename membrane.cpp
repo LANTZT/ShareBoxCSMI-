@@ -38,7 +38,7 @@ int main( int argc, char** argv ) {
   auto a = form2(_test=Xh,_trial=Xh);
   a = integrate( _range=elements(mesh),
                  _expr=gradt(u)*trans(grad(v)) );
-  a+=on( _range=boundaryfaces(mesh),_element= u, _rhs=l,expr=cst(0.) );
+  a+=on( _range=boundaryfaces(mesh),_element= u, _rhs=l, _expr=cst(0.) );
    // solve a( u, v ) = l( v )
   a.solve( _solution=u, _rhs=l );
 
