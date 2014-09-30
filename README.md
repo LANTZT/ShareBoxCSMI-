@@ -1,6 +1,3 @@
 ShareBoxCSMI-
 =============
 
--
-- This name sucks
-- 
