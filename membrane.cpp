@@ -30,7 +30,7 @@ int main( int argc, char** argv ) {
   auto v = Xh->element();
   //auto ue = expr("1+x*x+2*y*y:x:y");
   //auto f = expr("-6:x:y");
-    auto f=expr("exp(-0.5*(pow((R*-x0)/sigma,2)) - 0.5*(pow((R*y-y0)/sigma,2))):x:y:T:sigma:x0:y0");
+    auto f=expr("4*exp(-0.5*(pow((R*x-x0)/sigma,2)) - 0.5*(pow((R*y-y0)/sigma,2))):x:y:R:T:sigma:x0:y0");
   // $\int_\Omega f v$
   auto l = form1(_test=Xh);
   l= integrate( _range=elements(mesh),_expr= f*id(v) );
