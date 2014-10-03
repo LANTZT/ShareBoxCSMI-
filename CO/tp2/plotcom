@@ -1,0 +1,5 @@
+plot 'g' w l
+pause -1
+set autoscale 
+plot 'u_droit' w l
+pause -1
