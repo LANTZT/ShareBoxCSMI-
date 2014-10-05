@@ -6,7 +6,7 @@ int main( int argc, char** argv ) {
   ( "T", po::value<double>()->default_value(1.0), "Tension" )
   ( "x0", po::value<double>()->default_value(0.0), "x-coordinate" )
   ( "y0", po::value<double>()->default_value(0.0), "y-coordinate" )
-  ( "sigma", po::value<double>()->default_value(0.02), "sigma" )
+  ( "sigma", po::value<double>()->default_value(100), "sigma" )
   ( "R", po::value<double>()->default_value(0.3), "Radius" )
   ( "theta", po::value<double>()->default_value(0), "Angle" )
   ( "A", po::value<double>()->default_value(1.0), "Amplitude" );
@@ -22,8 +22,8 @@ int main( int argc, char** argv ) {
   auto Xh = Pch<2>(mesh);
   auto u = Xh->element();
   auto v = Xh->element();
-//  auto ue = expr("1+x*x+2*y*y:x:y");
-//  auto f = expr("-6:x:y");
+  auto d = Xh->element();
+  //  auto f = expr("-6:x:y");
   auto f=expr("4*exp(-0.5*(pow((R*x-x0)/sigma,2)) - 0.5*(pow((R*y-y0)/sigma,2))):x:y:R:T:sigma:x0:y0"); 
 
   double T = option(_name="T").as<double>();
@@ -33,6 +33,9 @@ int main( int argc, char** argv ) {
   double R = option(_name="R").as<double>();
   double theta = option(_name="theta").as<double>();
   double A = option(_name="A").as<double>();
+
+  //auto ue = expr("1-x*x-y*y:x:y");
+  auto ue = expr("(A*R*R)/(8*pi*sigma*T):x:y:A:R:sigma:T");
 
  auto F=vf::project( _space=Xh, _range=elements(mesh), _expr=4*exp(-0.5*(pow((R*Px()-x0)/sigma,2)) - 0.5*(pow((R*Py()-y0)/sigma,2))));
 
@@ -59,11 +62,21 @@ int main( int argc, char** argv ) {
 //                      _expr=(idv(u)-ue) )
 //            << "\n";
   
+  d=((A*R*R)/(8*pi*sigma*T))*u;
 
+   std::cout << "|d-ue|= "
+             << normL2(_range=elements(mesh),
+                      _expr=(idv(u)-ue ))
+             << "\n";
+
+    
+ // std::cout << d << std::endl;
+  
   auto e = exporter( _mesh=mesh ); 
   e->add( "u", u );
   e->add("f", F);
-  // v interpolate ue
+  e->add("d", d);
+ // v interpolate ue
  // v.on(_range=elements(mesh),_expr=ue );
  // e->add( "ue", v );
   e->save();
