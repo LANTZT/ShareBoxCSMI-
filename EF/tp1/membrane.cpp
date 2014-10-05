@@ -66,7 +66,7 @@ int main( int argc, char** argv ) {
 
    std::cout << "|d-ue|= "
              << normL2(_range=elements(mesh),
-                      _expr=(idv(u)-ue ))
+                      _expr=(idv(d)-ue ))
              << "\n";
 
     
